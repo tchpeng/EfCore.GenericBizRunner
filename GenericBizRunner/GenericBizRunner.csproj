@@ -27,25 +27,23 @@
 
   <PropertyGroup>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageId>EfCore.GenericBizRunner</PackageId>
+    <PackageId>GenericBizRunner</PackageId>
     <PackageVersion>4.1.0</PackageVersion>
-    <Version>4.1.0</Version>
-    <AssemblyVersion>4.1.0.0</AssemblyVersion>
-    <FileVersion>4.1.0.0</FileVersion>
-    <Authors>Jon P Smith</Authors>
-    <Description>Library to run business logic when using Entity Framework Core for database accesses</Description>
+    <Version>1.0.1</Version>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
+    <FileVersion>1.0.1.0</FileVersion>
+    <Authors>tchpeng</Authors>
+    <Description>Library to run business logic</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <Copyright>Copyright (c) 2018 Jon P Smith. Licenced under MIT licence</Copyright>
-    <PackageProjectUrl>https://github.com/JonPSmith/EfCore.GenericBizRunner</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/JonPSmith/EfCore.GenericBizRunner</RepositoryUrl>
-    <PackageTags>Entity Framework Core, Business Logic, ServiceLayer</PackageTags>
-    <PackageReleaseNotes>
-      - Update: Swapped to using GenericServices.StatusGeneric for status. This provides common status handling across my Generic libraries.
-      NOTE: You will need to install GenericServices.StatusGeneric NuGet packages in your biz logic etc.
-    </PackageReleaseNotes>
+    <Copyright>Original work Copyright (c) 2018 Jon P Smith. Modified work Copyright (c) 2020 tchpeng. Licenced under MIT licence</Copyright>
+    <PackageProjectUrl>https://github.com/tchpeng/GenericBizRunner</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/tchpeng/GenericBizRunner</RepositoryUrl>
+    <PackageTags>Business Logic, ServiceLayer</PackageTags>
+    <PackageReleaseNotes></PackageReleaseNotes>
     <PackageIconUrl>https://raw.githubusercontent.com/JonPSmith/EfCore.GenericBizRunner/master/GenericBizRunnerNuGetIcon128.png</PackageIconUrl>
     <PackageLicenseUrl>https://github.com/JonPSmith/EfCore.GenericBizRunner/blob/master/LICENCE</PackageLicenseUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Company>tchpeng</Company>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
