@@ -59,7 +59,7 @@ public ActionResult<TodoItem> Post(CreateTodoDto item,
 }
 ```
 
-## Why did I modify this library?
+## Why did I modify the library?
 
 [EfCore.GenericBizRunner](https://github.com/JonPSmith/EfCore.GenericBizRunner) is an awesome library that isolates the business logic so its easier to write and manage.
 However, it limit to only use [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/) for database accesses. So, modification required on [EfCore.GenericBizRunner](https://github.com/JonPSmith/EfCore.GenericBizRunner) to allow other way of database accesses.
