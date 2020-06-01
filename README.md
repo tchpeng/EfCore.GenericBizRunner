@@ -1,6 +1,6 @@
 # GenericBizRunner
 
-GenericBizRunner (modified from [EfCore.GenericBizRunner](https://github.com/JonPSmith/EfCore.GenericBizRunner)) is a library to help build and run business logic~~ when you are using [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/) for database accesses~~. Its aim is to totally isolate the business logic from other parts of the application, especially the user presentation/UI layers. It provides the following features:
+GenericBizRunner (modified from [EfCore.GenericBizRunner](https://github.com/JonPSmith/EfCore.GenericBizRunner)) is a library to help build and run business logic~~when you are using [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/) for database accesses~~. Its aim is to totally isolate the business logic from other parts of the application, especially the user presentation/UI layers. It provides the following features:
 
 * A standard pattern for writing business logic, including helper classes.
 * An anti-corruption layer feature that act as a barrier between the business logic and the user presentation/UI layers. 
