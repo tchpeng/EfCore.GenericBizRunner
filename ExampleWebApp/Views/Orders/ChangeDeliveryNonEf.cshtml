@@ -1,0 +1,75 @@
+﻿@model ServiceLayer.OrderServices.WebChangeDeliveryNonEfDto
+
+@{
+    ViewData["Title"] = "ChangeDelivery";
+}
+
+<h2>Change Delivery date</h2>
+
+@if (Model.HasErrors)
+{
+    <h3><strong class="text-warning">@Html.ValidationSummary(false)</strong></h3>
+}
+else
+{
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <div class="panel-heading">
+                <div>
+                    <span class="h4">Order @Model.OrderNumber </span>
+                    placed on @Model.DateOrderedUtc.ToString("f"). Expected delivery on @Model.OriginalDeliveryDate.ToShortDateString()
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <h3>Books in this order:</h3>
+                <ol>
+                    @{
+                        if (Model.BookTitles != null)
+                        {
+                            foreach (var book in Model.BookTitles)
+                            {
+                                <li>@book</li>
+                            }
+                        }
+                    }
+                </ol>
+            </div>
+        </div>
+        <hr>
+        <form class="form-inline" method="POST">
+            <div><strong class="text-danger">@Html.ValidationSummary(false)</strong></div>
+            <div class="form-group">
+                <input asp-for="OrderId" class="form-control" type="hidden"/>
+                <input asp-for="UserId" class="form-control" type="hidden"/>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <label class="control-label">Set new delivery</label>
+                        <select name="NewDeliveryDate" class="form-control"
+                                asp-items="@Model.PossibleDeliveryDates"></select>
+                    </div>
+                </div>
+                @*<div class="form-group panel-footer">*@
+                <div class="row text-center">
+                    <div class="col-xs-8">
+                        <button type="submit" class="btn btn-success btn-block">
+                            Change
+                        </button>
+                    </div>
+                </div>
+                @*</div>*@
+            </div>
+        </form>
+    </div>
+}
+
+
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

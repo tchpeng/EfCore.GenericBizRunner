@@ -4,6 +4,7 @@
 using System;
 using BizLogic.Orders;
 using DataLayer.EfCode;
+using DataLayer.NonEf;
 using ExampleWebApp.Helpers;
 using GenericBizRunner;
 using Microsoft.AspNetCore.Http;
@@ -79,6 +80,59 @@ namespace EfCoreInAction.Controllers
                 SetupTraceInfo();       //Used to update the logs
                 //We copy the message from the business logic to show 
                 return RedirectToAction("ConfirmOrder", "Orders", 
+                    new { dto.OrderId, message = service.Status.Message });
+            }
+
+            //Otherwise errors, so I need to redisplay the page to the user
+            service.Status.CopyErrorsToModelState(ModelState, dto);
+            //I reset the DTO, which will call SetupSecondaryData i set up the display props
+            service.ResetDto(dto);
+            SetupTraceInfo();       //Used to update the logs
+            return View(dto); //redisplay the page, with the errors
+        }
+
+        // Include the NonEfRepo type in IActionService to specify that the repository type in use
+        public IActionResult ChangeDeliveryNonEf(int id,
+            [FromServices] IActionService<NonEfRepo, IChangeDeliverNonEfAction> service)
+        {
+            //When the DTO is created it will run the SetupSecondaryData method to build the data needed for the display
+            //For the SetupSecondaryData to work it needs the orderId and UserId, so the GetOriginal method allow you to add these
+            //via the optional parameter. This sets these properties before the SetupSecondaryData method is called
+            var dto = service.GetDto<WebChangeDeliveryNonEfDto>(x =>
+            {
+                x.OrderId = id;
+                x.UserId = GetUserId(HttpContext);
+            });
+            //It is possible that the call to SetupSecondaryData may add an error
+            //CopyErrorsToModelState will do notthing if there are no errors
+            service.Status.CopyErrorsToModelState(ModelState, dto);
+            return View(dto);
+        }
+
+        // Include the NonEfRepo type in IActionService to specify that the repository type in use
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ChangeDeliveryNonEf(WebChangeDeliveryNonEfDto dto,
+            [FromServices] IActionService<NonEfRepo, IChangeDeliverNonEfAction> service)
+        {
+            if (!ModelState.IsValid)
+            {
+                //I have to reset the DTO, which will call SetupSecondaryData
+                //to set up the values needed for the display
+                service.ResetDto(dto);
+                //return to the same view to show the errors
+                return View(dto);
+            }
+
+            //This runs my business logic using the service injected in the
+            //Action's service parameter
+            service.RunBizAction(dto);
+
+            if (!service.Status.HasErrors)
+            {
+                SetupTraceInfo();       //Used to update the logs
+                //We copy the message from the business logic to show 
+                return RedirectToAction("ConfirmOrder", "Orders",
                     new { dto.OrderId, message = service.Status.Message });
             }
 

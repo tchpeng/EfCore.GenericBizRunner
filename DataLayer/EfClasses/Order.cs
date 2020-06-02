@@ -1,13 +1,11 @@
 ﻿// Copyright (c) 2017 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT license. See License.txt in the project root for license information.
 
+using DataLayer.Dtos;
+using StatusGeneric;
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
-using DataLayer.Dtos;
-using GenericBizRunner;
-using StatusGeneric;
 
 namespace DataLayer.EfClasses
 {

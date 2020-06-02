@@ -2,7 +2,9 @@
 using BizDbAccess.Orders.Concrete;
 using BizLogic.Orders.Concrete;
 using DataLayer.EfCode;
+using DataLayer.NonEf;
 using EfCoreInAction.Logger;
+using GenericBizRunner;
 using GenericBizRunner.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -46,9 +48,17 @@ namespace EfCoreInAction
             services.AddDbContext<EfCoreContext>(options => options.UseSqlite(connection));
             //--------------------------------------------------------------------
 
+            #region "NonEfRepo"
+            // Add NonEfRepo for Non EF sample in OrdersController ChangeDeliveryNonEf
+            services.AddSingleton<SqliteConnection>(options => connection);
+            services.AddSingleton<NonEfRepo>();
+            #endregion
+
             #region GenericBizRunner parts
             //This sets up the GenericBizRunner to use one DbContext. Note: you could add a GenericBizRunnerConfig here if you needed it
-            services.RegisterBizRunnerWithDtoScans<EfCoreContext>(Assembly.GetAssembly(typeof(WebChangeDeliveryDto)));
+            services.AddScoped<IRepository>(sp => sp.GetService<EfCoreContext>());
+            services.RegisterBizRunnerMultiDbContextWithDtoScans(Assembly.GetAssembly(typeof(WebChangeDeliveryDto)));
+            //services.RegisterBizRunnerWithDtoScans<EfCoreContext>(Assembly.GetAssembly(typeof(WebChangeDeliveryDto)));
             //This sets up the GenericBizRunner to work with multiple DbContext
             //see https://github.com/JonPSmith/EfCore.GenericBizRunner/wiki/Using-multiple-DbContexts
             //services.RegisterBizRunnerMultiDbContextWithDtoScans(Assembly.GetAssembly(typeof(WebChangeDeliveryDto)));

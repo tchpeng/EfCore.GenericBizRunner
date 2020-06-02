@@ -59,6 +59,11 @@
                        asp-action="ChangeDelivery" 
                        asp-route-id="@Model.OrderId">
                         Change delivery date</a>
+                    
+                    <a class="btn btn-warning" asp-controller="Orders" 
+                       asp-action="ChangeDeliveryNonEf" 
+                       asp-route-id="@Model.OrderId">
+                        Change delivery date (Non Ef)</a>
                 }
             </div>
             <div class="col-xs-6">
