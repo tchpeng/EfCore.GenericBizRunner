@@ -3,7 +3,6 @@
 
 using AutoMapper;
 using GenericBizRunner;
-using Microsoft.EntityFrameworkCore;
 using TestBizLayer.BizDTOs;
 
 namespace TestNetStandard2_0Only.DTOs
@@ -15,16 +14,16 @@ namespace TestNetStandard2_0Only.DTOs
         public bool SetupSecondaryOutputDataCalled { get; private set; }
         public bool CopyFromBizDataCalled { get; private set; }
 
-        protected override void SetupSecondaryOutputData(DbContext db)
+        protected override void SetupSecondaryOutputData(object repository)
         {
             SetupSecondaryOutputDataCalled = true;
-            base.SetupSecondaryOutputData(db);
+            base.SetupSecondaryOutputData(repository);
         }
 
-        protected override ServiceLayerBizOutDto CopyFromBizData(DbContext db, IMapper mapper,
+        protected override ServiceLayerBizOutDto CopyFromBizData(object repository, IMapper mapper,
             BizDataOut source)
         {
-            var result = base.CopyFromBizData(db, mapper, source);
+            var result = base.CopyFromBizData(repository, mapper, source);
             result.CopyFromBizDataCalled = true;
             return result;
         }

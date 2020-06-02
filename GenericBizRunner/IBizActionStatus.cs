@@ -13,6 +13,7 @@ namespace GenericBizRunner
     {
         /// <summary>
         /// This method is used by GenericBzRunner to work out whether a call to saveChanges should also validate the data
+        /// Note: Only be used if type of DbContext is being used and supplied via IRepository
         /// </summary>
         /// <param name="config"></param>
         /// <returns></returns>

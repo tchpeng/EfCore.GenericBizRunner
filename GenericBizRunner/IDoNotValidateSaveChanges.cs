@@ -4,6 +4,7 @@ namespace GenericBizRunner
 {
     /// <summary>
     /// If you add this interface to the business logic then it will not validate the data when calling SaveChanges
+    /// Note: Only be used if type of DbContext is being used and supplied via IRepository
     /// </summary>
     public interface IDoNotValidateSaveChanges
     {}

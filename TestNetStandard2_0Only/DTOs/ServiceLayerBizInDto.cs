@@ -3,7 +3,6 @@
 
 using AutoMapper;
 using GenericBizRunner;
-using Microsoft.EntityFrameworkCore;
 using StatusGeneric;
 using TestBizLayer.BizDTOs;
 
@@ -19,17 +18,17 @@ namespace TestNetStandard2_0Only.DTOs
 
         public bool CopyToBizDataCalled { get; private set; }
 
-        protected override void SetupSecondaryData(DbContext db, IStatusGenericHandler status)
+        protected override void SetupSecondaryData(object repository, IStatusGenericHandler status)
         {
             SetupSecondaryDataCalled = true;
             if (RaiseErrorInSetupSecondaryData)
                 status.AddError("Error in SetupSecondaryData");
         }
 
-        protected override BizDataIn CopyToBizData(DbContext db, IMapper mapper, ServiceLayerBizInDto source)
+        protected override BizDataIn CopyToBizData(object repository, IMapper mapper, ServiceLayerBizInDto source)
         {
             CopyToBizDataCalled = true;
-            return base.CopyToBizData(db, mapper, source);
+            return base.CopyToBizData(repository, mapper, source);
         }
     }
 }

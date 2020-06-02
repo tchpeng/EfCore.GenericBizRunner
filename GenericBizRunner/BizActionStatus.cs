@@ -1,14 +1,15 @@
 ﻿// Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT license. See License.txt in the project root for license information.
 
-using System.Diagnostics;
 using GenericBizRunner.Configuration;
 using StatusGeneric;
+using System.Diagnostics;
 
 namespace GenericBizRunner
 {
     /// <summary>
     /// This enum allows you to set whether a SaveChange is validated or not
+    /// Note: Only be used if type of DbContext is being used and supplied via IRepository
     /// </summary>
     public enum ValidateOnSaveStates
     {
@@ -36,6 +37,7 @@ namespace GenericBizRunner
         /// <summary>
         /// This method returns true if the data added or updated should be validated on calling SaveChanges
         /// It inspects the protected ValidateOnSaveSetting and the config's DoNotValidateSaveChanges property
+        /// Note: Only be used if type of DbContext is being used and supplied via IRepository
         /// </summary>
         /// <param name="config"></param>
         /// <returns></returns>
@@ -50,6 +52,7 @@ namespace GenericBizRunner
         /// <summary>
         /// This allows you to set whether GenericBizRunner will validate a call to SaveChanges
         /// Its default state is to use the IGenericBizRunnerConfig.DoNotValidateSaveChanges boolean, which defaults to false
+        /// Note: Only be used if type of DbContext is being used and supplied via IRepository
         /// </summary>
         protected virtual ValidateOnSaveStates ValidateOnSaveSetting => ValidateOnSaveStates.UseConfig;
     }

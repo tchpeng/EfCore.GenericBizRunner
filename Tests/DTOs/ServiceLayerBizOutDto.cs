@@ -15,16 +15,16 @@ namespace Tests.DTOs
         public bool SetupSecondaryOutputDataCalled { get; private set; }
         public bool CopyFromBizDataCalled { get; private set; }
 
-        protected internal override void SetupSecondaryOutputData(DbContext db)
+        protected internal override void SetupSecondaryOutputData(object repository)
         {
             SetupSecondaryOutputDataCalled = true;
-            base.SetupSecondaryOutputData(db);
+            base.SetupSecondaryOutputData(repository);
         }
 
-        protected internal override ServiceLayerBizOutDto CopyFromBizData(DbContext db, IMapper mapper,
+        protected internal override ServiceLayerBizOutDto CopyFromBizData(object repository, IMapper mapper,
             BizDataOut source)
         {
-            var result = base.CopyFromBizData(db, mapper, source);
+            var result = base.CopyFromBizData(repository, mapper, source);
             result.CopyFromBizDataCalled = true;
             return result;
         }

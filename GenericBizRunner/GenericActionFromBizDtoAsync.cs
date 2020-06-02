@@ -1,10 +1,10 @@
-﻿// Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+﻿// Original work Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// Modified work Copyright (c) 2020 tchpeng, GitHub: tchpeng
 // Licensed under MIT license. See License.txt in the project root for license information.
 
-using System.Threading.Tasks;
 using AutoMapper;
 using GenericBizRunner.PublicButHidden;
-using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace GenericBizRunner
 {
@@ -24,9 +24,9 @@ namespace GenericBizRunner
         /// Useful if the biz method returns say primary keys only and you would like to look up
         /// data to show to the user.
         /// </summary>
-        /// <param name="db"></param>
+        /// <param name="repository"></param>
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        internal protected virtual async Task SetupSecondaryOutputDataAsync(DbContext db)
+        internal protected virtual async Task SetupSecondaryOutputDataAsync(object repository)
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
         }
@@ -39,12 +39,12 @@ namespace GenericBizRunner
         /// Also note that this method should not fail because any write to the database (optional)
         /// has already happened by the time this is called.
         /// </summary>
-        /// <param name="db"></param>
+        /// <param name="repository"></param>
         /// <param name="mapper"></param>
         /// <param name="source"></param>
         /// <returns></returns>
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        internal protected virtual async Task<TDtoOut> CopyFromBizDataAsync(DbContext db, IMapper mapper, TBizOut source)
+        internal protected virtual async Task<TDtoOut> CopyFromBizDataAsync(object repository, IMapper mapper, TBizOut source)
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             return mapper.Map<TDtoOut>(source);

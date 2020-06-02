@@ -1,9 +1,9 @@
-﻿// Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+﻿// Original work Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// Modified work Copyright (c) 2020 tchpeng, GitHub: tchpeng
 // Licensed under MIT license. See License.txt in the project root for license information.
 
 using AutoMapper;
 using GenericBizRunner.PublicButHidden;
-using Microsoft.EntityFrameworkCore;
 using StatusGeneric;
 
 namespace GenericBizRunner
@@ -21,9 +21,9 @@ namespace GenericBizRunner
         /// Use this to setup any extra data needed when showing the dto to the user for input, e.g. supporting dropdownlists
         /// This is called a) when a dto is created by GetDto , b) when ResetDto is called and c) when the call to the business logic fails
         /// </summary>
-        /// <param name="db"></param>
+        /// <param name="repository"></param>
         /// <param name="status">You can raise an error, which will stop the biz logic from running</param>
-        protected internal virtual void SetupSecondaryData(DbContext db, IStatusGenericHandler status)
+        protected internal virtual void SetupSecondaryData(object repository, IStatusGenericHandler status)
         {
         }
 
@@ -32,11 +32,11 @@ namespace GenericBizRunner
         /// extra data bindings added, e.g. from supporting dropdown lists.
         /// Note: Look at AutoMapperSetup method first as that can handle a number of mapping issues
         /// </summary>
-        /// <param name="db">This allows you to access the DbContext to access the database</param>
+        /// <param name="repository">This allows you to access the repository supplied via IRepository</param>
         /// <param name="mapper"></param>
         /// <param name="source"></param>
         /// <returns></returns>
-        protected internal virtual TBizIn CopyToBizData(DbContext db, IMapper mapper, TDtoIn source)
+        protected internal virtual TBizIn CopyToBizData(object repository, IMapper mapper, TDtoIn source)
         {
             return mapper.Map<TBizIn>(source);
         }

@@ -1,45 +1,45 @@
-﻿// Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+﻿// Original work Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// Modified work Copyright (c) 2020 tchpeng, GitHub: tchpeng
 // Licensed under MIT license. See License.txt in the project root for license information.
 
-using System;
 using GenericBizRunner.Internal;
 using GenericBizRunner.PublicButHidden;
-using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace GenericBizRunner
 {
     /// <summary>
-    /// This defines the ActionService using the default DbContext
+    /// This defines the ActionService using the default repository supplied via IRepository
     /// </summary>
     /// <typeparam name="TBizInstance">The instance of the business logic you are linking to</typeparam>
-    public class ActionService<TBizInstance> : ActionService<DbContext, TBizInstance>, IActionService<TBizInstance>
+    public class ActionService<TBizInstance> : ActionService<IRepository, TBizInstance>, IActionService<TBizInstance>
         where TBizInstance : class, IBizActionStatus
     {
         /// <inheritdoc />
-        public ActionService(DbContext context, TBizInstance bizInstance, IWrappedBizRunnerConfigAndMappings wrappedConfig)
-            : base(context, bizInstance, wrappedConfig)
+        public ActionService(IRepository repository, TBizInstance bizInstance, IWrappedBizRunnerConfigAndMappings wrappedConfig)
+            : base(repository, bizInstance, wrappedConfig)
         {
         }
     }
 
     /// <summary>
-    /// This defines the ActionService where you supply the type of the DbContext you want used with the business logic
+    /// This defines the ActionService where you supply the type of the repository you want used with the business logic
     /// </summary>
-    /// <typeparam name="TContext">The EF Core DbContext to be used wit this business logic</typeparam>
+    /// <typeparam name="TRepository">The repository to be used with this business logic</typeparam>
     /// <typeparam name="TBizInstance">The instance of the business logic you are linking to</typeparam>
-    public class ActionService<TContext, TBizInstance> : IActionService<TContext, TBizInstance>
-        where TContext : DbContext
+    public class ActionService<TRepository, TBizInstance> : IActionService<TRepository, TBizInstance>
+        where TRepository : class, IRepository
         where TBizInstance : class, IBizActionStatus
     {
         private readonly TBizInstance _bizInstance;
         private readonly IWrappedBizRunnerConfigAndMappings _wrappedConfig;
-        private readonly TContext _context;
+        private readonly TRepository _repository;
         private readonly bool _turnOffCaching;
 
         /// <inheritdoc />
-        public ActionService(TContext context, TBizInstance bizInstance, IWrappedBizRunnerConfigAndMappings wrappedConfig)
+        public ActionService(TRepository repository, TBizInstance bizInstance, IWrappedBizRunnerConfigAndMappings wrappedConfig)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _bizInstance = bizInstance ?? throw new ArgumentNullException(nameof(bizInstance));
             _wrappedConfig = wrappedConfig ?? throw new ArgumentNullException(nameof(wrappedConfig));
             _turnOffCaching = _wrappedConfig.Config.TurnOffCaching;
@@ -59,7 +59,7 @@ namespace GenericBizRunner
         public TOut RunBizAction<TOut>(object inputData)
         {
             var decoder = new BizDecoder(typeof(TBizInstance), RequestedInOut.InOut, _turnOffCaching);
-            return decoder.BizInfo.GetServiceInstance(_wrappedConfig).RunBizActionDbAndInstance<TOut>(_context, _bizInstance, inputData);
+            return decoder.BizInfo.GetServiceInstance(_wrappedConfig).RunBizActionDbAndInstance<TOut>(_repository, _bizInstance, inputData);
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace GenericBizRunner
         public TOut RunBizAction<TOut>()
         {
             var decoder = new BizDecoder(typeof(TBizInstance), RequestedInOut.Out, _turnOffCaching);
-            return decoder.BizInfo.GetServiceInstance(_wrappedConfig).RunBizActionDbAndInstance<TOut>(_context, _bizInstance);
+            return decoder.BizInfo.GetServiceInstance(_wrappedConfig).RunBizActionDbAndInstance<TOut>(_repository, _bizInstance);
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace GenericBizRunner
         {
             var decoder = new BizDecoder(typeof(TBizInstance), RequestedInOut.In, _turnOffCaching);
             decoder.BizInfo.GetServiceInstance(_wrappedConfig)
-                .RunBizActionDbAndInstance(_context, _bizInstance, inputData);
+                .RunBizActionDbAndInstance(_repository, _bizInstance, inputData);
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace GenericBizRunner
             var decoder = new BizDecoder(typeof(TBizInstance), RequestedInOut.InOrInOut, _turnOffCaching);
             var toBizCopier = DtoAccessGenerator.BuildCopier(typeof(TDto), decoder.BizInfo.GetBizInType(), 
                 true, false, _turnOffCaching);
-            return toBizCopier.CreateDataWithPossibleSetup<TDto>(_context, Status, runBeforeSetup);
+            return toBizCopier.CreateDataWithPossibleSetup<TDto>(_repository, Status, runBeforeSetup);
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace GenericBizRunner
 
             var decoder = new BizDecoder(typeof(TBizInstance), RequestedInOut.InOrInOut, _turnOffCaching);
             var toBizCopier = DtoAccessGenerator.BuildCopier(typeof(TDto), decoder.BizInfo.GetBizInType(), true, false, _turnOffCaching);
-            toBizCopier.SetupSecondaryDataIfRequired(_context, Status, dto);
+            toBizCopier.SetupSecondaryDataIfRequired(_repository, Status, dto);
             return dto;
         }
 

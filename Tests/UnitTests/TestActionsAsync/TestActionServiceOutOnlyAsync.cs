@@ -23,7 +23,7 @@ namespace Tests.UnitTests.TestActionsAsync
         private readonly IGenericBizRunnerConfig _noCachingConfig = new GenericBizRunnerConfig { TurnOffCaching = true };
 
         //This action does not access the database, but the ActionService checks that the dbContext isn't null
-        private readonly DbContext _emptyDbContext = new TestDbContext(SqliteInMemory.CreateOptions<TestDbContext>());
+        private readonly TestDbContext _emptyDbContext = new TestDbContext(SqliteInMemory.CreateOptions<TestDbContext>());
 
         [Fact]
         public async Task TestActionServiceOutOnlyDirectOk()

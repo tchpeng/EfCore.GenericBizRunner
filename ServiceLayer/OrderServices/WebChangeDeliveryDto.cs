@@ -46,14 +46,14 @@ namespace ServiceLayer.OrderServices
         /// </summary>
         /// <param name="db">The DbContext to allow access to the database</param>
         /// <param name="status">The BizActionStatus so you can register errors</param>
-        protected override void SetupSecondaryData(DbContext db, IStatusGenericHandler status)
+        protected override void SetupSecondaryData(object repository, IStatusGenericHandler status)
         {
             if (OrderId == 0)
                 throw new InvalidOperationException("You must set the OrderId before you call SetupSecondaryData");
             if (UserId == null)
                 throw new InvalidOperationException("You must set the UserId before you call SetupSecondaryData");
 
-            var order = db.Set<Order>()
+            var order = ((DbContext)repository).Set<Order>()
                 .Include(x => x.LineItems).ThenInclude(x => x.ChosenBook)
                 .SingleOrDefault(x => x.OrderId == OrderId);
 

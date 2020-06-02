@@ -1,46 +1,46 @@
-﻿// Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+﻿// Original work Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// Modified work Copyright (c) 2020 tchpeng, GitHub: tchpeng
 // Licensed under MIT license. See License.txt in the project root for license information.
 
-using System;
-using System.Threading.Tasks;
 using GenericBizRunner.Internal;
 using GenericBizRunner.PublicButHidden;
-using Microsoft.EntityFrameworkCore;
+using System;
+using System.Threading.Tasks;
 
 namespace GenericBizRunner
 {
     /// <summary>
-    /// This defines the ActionServiceAsync using the default DbContext
+    /// This defines the ActionServiceAsync using the default repository supplied via IRepository
     /// </summary>
     /// <typeparam name="TBizInstance">The instance of the business logic you are linking to</typeparam>
-    public class ActionServiceAsync<TBizInstance> : ActionServiceAsync<DbContext, TBizInstance>, IActionServiceAsync<TBizInstance>
+    public class ActionServiceAsync<TBizInstance> : ActionServiceAsync<IRepository, TBizInstance>, IActionServiceAsync<TBizInstance>
         where TBizInstance : class, IBizActionStatus
     {
         /// <inheritdoc />
-        public ActionServiceAsync(DbContext context, TBizInstance bizInstance, IWrappedBizRunnerConfigAndMappings wrappedConfig)
-            : base(context, bizInstance, wrappedConfig)
+        public ActionServiceAsync(IRepository repository, TBizInstance bizInstance, IWrappedBizRunnerConfigAndMappings wrappedConfig)
+            : base(repository, bizInstance, wrappedConfig)
         {
         }
     }
 
     /// <summary>
-    /// This defines the ActionServiceAsync where you supply the type of the DbContext you want used with the business logic
+    /// This defines the ActionServiceAsync where you supply the type of the repository you want used with the business logic
     /// </summary>
-    /// <typeparam name="TContext">The EF Core DbContext to be used wit this business logic</typeparam>
+    /// <typeparam name="TRepository">The repository to be used with this business logic</typeparam>
     /// <typeparam name="TBizInstance">The instance of the business logic you are linking to</typeparam>
-    public class ActionServiceAsync<TContext, TBizInstance> : IActionServiceAsync<TContext, TBizInstance>
-        where TContext : DbContext
+    public class ActionServiceAsync<TRepository, TBizInstance> : IActionServiceAsync<TRepository, TBizInstance>
+        where TRepository : class, IRepository
         where TBizInstance : class, IBizActionStatus
     {
         private readonly TBizInstance _bizInstance;
         private readonly IWrappedBizRunnerConfigAndMappings _wrappedConfig;
-        private readonly TContext _context;
+        private readonly TRepository _repository;
         private readonly bool _turnOffCaching;
 
         /// <inheritdoc />
-        public ActionServiceAsync(TContext context, TBizInstance bizInstance, IWrappedBizRunnerConfigAndMappings wrappedConfig)
+        public ActionServiceAsync(TRepository repository, TBizInstance bizInstance, IWrappedBizRunnerConfigAndMappings wrappedConfig)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _bizInstance = bizInstance ?? throw new ArgumentNullException(nameof(bizInstance));
             _wrappedConfig = wrappedConfig ?? throw new ArgumentNullException(nameof(wrappedConfig));
             _turnOffCaching = _wrappedConfig.Config.TurnOffCaching;
@@ -61,7 +61,7 @@ namespace GenericBizRunner
         {
             var decoder = new BizDecoder(typeof(TBizInstance), RequestedInOut.InOut | RequestedInOut.Async, _turnOffCaching);
             return await ((Task<TOut>) decoder.BizInfo.GetServiceInstance(_wrappedConfig)
-                    .RunBizActionDbAndInstanceAsync<TOut>(_context, _bizInstance, inputData))
+                    .RunBizActionDbAndInstanceAsync<TOut>(_repository, _bizInstance, inputData))
                 .ConfigureAwait(false);
         }
 
@@ -74,7 +74,7 @@ namespace GenericBizRunner
         {
             var decoder = new BizDecoder(typeof(TBizInstance), RequestedInOut.Out | RequestedInOut.Async, _turnOffCaching);
             return await ((Task<TOut>)decoder.BizInfo.GetServiceInstance(_wrappedConfig)
-                    .RunBizActionDbAndInstanceAsync<TOut>(_context, _bizInstance))
+                    .RunBizActionDbAndInstanceAsync<TOut>(_repository, _bizInstance))
                 .ConfigureAwait(false);
         }
 
@@ -87,7 +87,7 @@ namespace GenericBizRunner
         {
             var decoder = new BizDecoder(typeof(TBizInstance), RequestedInOut.In | RequestedInOut.Async, _turnOffCaching);
             await ((Task) decoder.BizInfo.GetServiceInstance(_wrappedConfig)
-                .RunBizActionDbAndInstanceAsync(_context, _bizInstance, inputData))
+                .RunBizActionDbAndInstanceAsync(_repository, _bizInstance, inputData))
                 .ConfigureAwait(false);
         }
 
@@ -105,7 +105,7 @@ namespace GenericBizRunner
 
             var decoder = new BizDecoder(typeof(TBizInstance), RequestedInOut.InOrInOut | RequestedInOut.Async, _turnOffCaching);
             var toBizCopier = DtoAccessGenerator.BuildCopier(typeof(TDto), decoder.BizInfo.GetBizInType(), true, true, _turnOffCaching);
-            return await toBizCopier.CreateDataWithPossibleSetupAsync<TDto>(_context, Status, runBeforeSetup).ConfigureAwait(false);
+            return await toBizCopier.CreateDataWithPossibleSetupAsync<TDto>(_repository, Status, runBeforeSetup).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace GenericBizRunner
 
             var decoder = new BizDecoder(typeof(TBizInstance), RequestedInOut.InOrInOut | RequestedInOut.Async, _turnOffCaching);
             var toBizCopier = DtoAccessGenerator.BuildCopier(typeof(TDto), decoder.BizInfo.GetBizInType(), true, true, _turnOffCaching);
-            await toBizCopier.SetupSecondaryDataIfRequiredAsync(_context, Status, dto).ConfigureAwait(false);
+            await toBizCopier.SetupSecondaryDataIfRequiredAsync(_repository, Status, dto).ConfigureAwait(false);
             return dto;
         }
 

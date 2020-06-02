@@ -19,17 +19,17 @@ namespace Tests.DTOs
         public bool SetupSecondaryDataCalled { get; private set; }
         public bool CopyToBizDataCalled { get; private set; }
 
-        protected internal override async Task SetupSecondaryDataAsync(DbContext db, IBizActionStatus status)
+        protected internal override async Task SetupSecondaryDataAsync(object repository, IBizActionStatus status)
         {
             SetupSecondaryDataCalled = true;
             if (RaiseErrorInSetupSecondaryData)
                 status.AddError("Error in SetupSecondaryData");
         }
 
-        protected internal override async Task<BizDataIn> CopyToBizDataAsync(DbContext db, IMapper mapper, ServiceLayerBizInDtoAsync source)
+        protected internal override async Task<BizDataIn> CopyToBizDataAsync(object repository, IMapper mapper, ServiceLayerBizInDtoAsync source)
         {
             CopyToBizDataCalled = true;
-            return await base.CopyToBizDataAsync(db, mapper, source);
+            return await base.CopyToBizDataAsync(repository, mapper, source);
         }
     }
 }

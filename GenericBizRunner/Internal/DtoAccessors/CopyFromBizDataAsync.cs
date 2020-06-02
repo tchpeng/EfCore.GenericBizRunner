@@ -1,9 +1,9 @@
-﻿// Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+﻿// Original work Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// Modified work Copyright (c) 2020 tchpeng, GitHub: tchpeng
 // Licensed under MIT license. See License.txt in the project root for license information.
 
-using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace GenericBizRunner.Internal.DtoAccessors
 {
@@ -13,14 +13,14 @@ namespace GenericBizRunner.Internal.DtoAccessors
     {
         private readonly TDtoOut _dtoInstance = new TDtoOut();
 
-        public async Task<TDtoOut> CopyFromBizAsync(DbContext db, IMapper mapper, object source)
+        public async Task<TDtoOut> CopyFromBizAsync(object repository, IMapper mapper, object source)
         {
-            return await _dtoInstance.CopyFromBizDataAsync(db, mapper, (TBizOut) source).ConfigureAwait(false);
+            return await _dtoInstance.CopyFromBizDataAsync(repository, mapper, (TBizOut) source).ConfigureAwait(false);
         }
 
-        public async Task SetupSecondaryOutputDataAsync(DbContext db, object dto)
+        public async Task SetupSecondaryOutputDataAsync(object repository, object dto)
         {
-            await ((TDtoOut)dto).SetupSecondaryOutputDataAsync(db).ConfigureAwait(false);
+            await ((TDtoOut)dto).SetupSecondaryOutputDataAsync(repository).ConfigureAwait(false);
         }
     }
 }

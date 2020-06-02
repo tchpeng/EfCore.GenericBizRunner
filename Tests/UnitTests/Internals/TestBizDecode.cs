@@ -303,7 +303,7 @@ namespace Tests.UnitTests.Internals
             runMethod.Name.ShouldEqual("RunBizActionDbAndInstanceAsync");
             runMethod.ReturnType.ShouldEqual(typeof(Task));
             runMethod.GetParameters().Select(x => x.ParameterType).ShouldEqual(
-                new[] { typeof(DbContext), typeof(IBizActionInOnlyAsync), typeof(object)});
+                new[] { typeof(object), typeof(IBizActionInOnlyAsync), typeof(object)});
         }
 
         [Fact]
@@ -319,7 +319,7 @@ namespace Tests.UnitTests.Internals
             runMethod.Name.ShouldEqual("RunBizActionDbAndInstance");
             runMethod.ReturnType.ShouldEqual(typeof(void));
             runMethod.GetParameters().Select(x => x.ParameterType).ShouldEqual(
-                new[] { typeof(DbContext), typeof(IBizActionInOnly), typeof(object) });
+                new[] { typeof(object), typeof(IBizActionInOnly), typeof(object) });
         }
 
         [Fact]
@@ -335,7 +335,7 @@ namespace Tests.UnitTests.Internals
             runMethod.Name.ShouldEqual("RunBizActionDbAndInstanceAsync");
             runMethod.ReturnType.ShouldEqual(typeof(Task<BizDataOut>));
             runMethod.GetParameters().Select(x => x.ParameterType).ShouldEqual(
-                new[] { typeof(DbContext), typeof(IBizActionInOutAsync), typeof(object) });
+                new[] { typeof(object), typeof(IBizActionInOutAsync), typeof(object) });
         }
 
         //---------------------------------------------------------------------
@@ -354,7 +354,7 @@ namespace Tests.UnitTests.Internals
             runMethod.Name.ShouldEqual("RunBizActionDbAndInstance");
             runMethod.ReturnType.ShouldEqual(typeof(BizDataOut));
             runMethod.GetParameters().Select(x => x.ParameterType).ShouldEqual(
-                new[] {typeof (DbContext), typeof (IBizActionInOut), typeof (object)});
+                new[] {typeof (object), typeof (IBizActionInOut), typeof (object)});
         }
     }
 }

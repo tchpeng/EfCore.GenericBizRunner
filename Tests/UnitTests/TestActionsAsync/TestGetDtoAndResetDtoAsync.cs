@@ -25,7 +25,7 @@ namespace Tests.UnitTests.TestActionsAsync
     public class TestGetDtoAndResetDtoAsync
     {
         //This action does not access the database, but the ActionService checks that the dbContext isn't null
-        private readonly DbContext _emptyDbContext = new TestDbContext(SqliteInMemory.CreateOptions<TestDbContext>());
+        private readonly TestDbContext _emptyDbContext = new TestDbContext(SqliteInMemory.CreateOptions<TestDbContext>());
         //Because this is ValueInOut then there is no need for a mapper, but the ActionService checks that the Mapper isn't null
         private readonly IWrappedBizRunnerConfigAndMappings _wrappedConfig;
 

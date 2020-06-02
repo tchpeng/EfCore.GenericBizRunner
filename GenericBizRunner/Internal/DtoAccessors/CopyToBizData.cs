@@ -1,8 +1,8 @@
-﻿// Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+﻿// Original work Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// Modified work Copyright (c) 2020 tchpeng, GitHub: tchpeng
 // Licensed under MIT license. See License.txt in the project root for license information.
 
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 
 namespace GenericBizRunner.Internal.DtoAccessors
 {
@@ -10,14 +10,14 @@ namespace GenericBizRunner.Internal.DtoAccessors
         where TBizIn : class, new()
         where TDtoIn : GenericActionToBizDto<TBizIn, TDtoIn>, new()
     {
-        public TBizIn CopyToBiz(DbContext db, IMapper mapper, object source)
+        public TBizIn CopyToBiz(object repository, IMapper mapper, object source)
         {
-            return ((TDtoIn) source).CopyToBizData(db, mapper, (TDtoIn) source);
+            return ((TDtoIn) source).CopyToBizData(repository, mapper, (TDtoIn) source);
         }
 
-        public void SetupSecondaryData(DbContext db, IBizActionStatus status, object dto)
+        public void SetupSecondaryData(object repository, IBizActionStatus status, object dto)
         {
-            ((TDtoIn) dto).SetupSecondaryData(db, status);
+            ((TDtoIn) dto).SetupSecondaryData(repository, status);
         }
     }
 }

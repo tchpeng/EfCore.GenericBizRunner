@@ -1,11 +1,11 @@
 ﻿// Copyright (c) 2019 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT license. See License.txt in the project root for license information.
 
+using AutoMapper;
+using GenericBizRunner.PublicButHidden;
 using System;
 using System.Linq;
 using System.Reflection;
-using AutoMapper;
-using GenericBizRunner.PublicButHidden;
 
 namespace GenericBizRunner.Configuration.Internal
 {

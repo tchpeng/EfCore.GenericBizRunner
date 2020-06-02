@@ -1,25 +1,24 @@
-﻿// Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+﻿// Original work Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// Modified work Copyright (c) 2020 tchpeng, GitHub: tchpeng
 // Licensed under MIT license. See License.txt in the project root for license information.
 
 using System;
-using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
 
 namespace GenericBizRunner
 {
     /// <summary>
-    /// This defines the interface for the ActionService that uses the default EF Core DbContext
+    /// This defines the interface for the ActionService that uses the default repository supplied via IRepository
     /// </summary>
     /// <typeparam name="TBizInstance">The instance of the business logic to run</typeparam>
-    public interface IActionService<TBizInstance> : IActionService<DbContext, TBizInstance> where TBizInstance : class
+    public interface IActionService<TBizInstance> : IActionService<IRepository, TBizInstance> where TBizInstance : class
     { }
 
     /// <summary>
     /// This is the primary interface to the sync actions
     /// </summary>
-    /// <typeparam name="TContext"></typeparam>
+    /// <typeparam name="TRepository"></typeparam>
     /// <typeparam name="TBizInstance"></typeparam>
-    public interface IActionService<TContext, TBizInstance> where TContext : DbContext where TBizInstance : class
+    public interface IActionService<TRepository, TBizInstance> where TRepository : IRepository where TBizInstance : class
     {
         /// <summary>
         /// This contains the Status after the BizAction is run

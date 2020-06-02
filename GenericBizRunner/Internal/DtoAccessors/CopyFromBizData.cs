@@ -1,8 +1,8 @@
-﻿// Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+﻿// Original work Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// Modified work Copyright (c) 2020 tchpeng, GitHub: tchpeng
 // Licensed under MIT license. See License.txt in the project root for license information.
 
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 
 namespace GenericBizRunner.Internal.DtoAccessors
 {
@@ -12,14 +12,14 @@ namespace GenericBizRunner.Internal.DtoAccessors
     {
         private readonly TDtoOut _dtoInstance = new TDtoOut();
 
-        public TDtoOut CopyFromBiz(DbContext db, IMapper mapper, object source)
+        public TDtoOut CopyFromBiz(object repository, IMapper mapper, object source)
         {
-            return _dtoInstance.CopyFromBizData(db, mapper, (TBizOut) source);
+            return _dtoInstance.CopyFromBizData(repository, mapper, (TBizOut) source);
         }
 
-        public void SetupSecondaryOutputData(DbContext db, object dto)
+        public void SetupSecondaryOutputData(object repository, object dto)
         {
-            ((TDtoOut)dto).SetupSecondaryOutputData(db);
+            ((TDtoOut)dto).SetupSecondaryOutputData(repository);
         }
     }
 }

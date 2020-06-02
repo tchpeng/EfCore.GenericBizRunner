@@ -1,11 +1,10 @@
-﻿// Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+﻿// Original work Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// Modified work Copyright (c) 2020 tchpeng, GitHub: tchpeng
 // Licensed under MIT license. See License.txt in the project root for license information.
 
-using System.Threading.Tasks;
 using AutoMapper;
 using GenericBizRunner.PublicButHidden;
-using Microsoft.EntityFrameworkCore;
-using StatusGeneric;
+using System.Threading.Tasks;
 
 namespace GenericBizRunner
 {
@@ -23,11 +22,11 @@ namespace GenericBizRunner
         /// Use this to setup any extra data needed when showing the dto to the user for input, e.g. supporting dropdownlists
         /// This is called a) when a dto is created by GetDto , b) when ResetDto is called and c) when the call to the business logic fails
         /// </summary>
-        /// <param name="db"></param>
+        /// <param name="repository"></param>
         /// <param name="status">You can raise an error, which will stop the biz logic from running</param>
         /// <returns></returns>
 #pragma warning disable CS1998
-        protected internal virtual async Task SetupSecondaryDataAsync(DbContext db, IBizActionStatus status)
+        protected internal virtual async Task SetupSecondaryDataAsync(object repository, IBizActionStatus status)
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
         }
@@ -38,12 +37,12 @@ namespace GenericBizRunner
         /// extra data bing added, e.g. from supporting dropdown lists.
         /// Note: Look at AutoMapperSetup method first as that can handle a number of mapping issues
         /// </summary>
-        /// <param name="db"></param>
+        /// <param name="repository"></param>
         /// <param name="mapper"></param>
         /// <param name="source"></param>
         /// <returns></returns>
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        protected internal virtual async Task<TBizIn> CopyToBizDataAsync(DbContext db, IMapper mapper, TDtoIn source)
+        protected internal virtual async Task<TBizIn> CopyToBizDataAsync(object repository, IMapper mapper, TDtoIn source)
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             return mapper.Map<TBizIn>(source);

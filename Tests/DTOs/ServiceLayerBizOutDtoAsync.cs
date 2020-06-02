@@ -16,14 +16,14 @@ namespace Tests.DTOs
         public bool SetupSecondaryOutputDataCalled { get; private set; }
         public bool CopyFromBizDataCalled { get; private set; }
 
-        protected internal override async Task SetupSecondaryOutputDataAsync(DbContext db)
+        protected internal override async Task SetupSecondaryOutputDataAsync(object repository)
         {
             SetupSecondaryOutputDataCalled = true;
         }
 
-        protected internal override async Task<ServiceLayerBizOutDtoAsync> CopyFromBizDataAsync(DbContext db, IMapper mapper, BizDataOut source)
+        protected internal override async Task<ServiceLayerBizOutDtoAsync> CopyFromBizDataAsync(object repository, IMapper mapper, BizDataOut source)
         {
-            var data = await base.CopyFromBizDataAsync(db, mapper, source);
+            var data = await base.CopyFromBizDataAsync(repository, mapper, source);
             data.CopyFromBizDataCalled = true;
             return data;
         }

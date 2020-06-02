@@ -109,7 +109,7 @@ namespace TestNetStandard2_0Only.UnitTests.DependencyInjection
         {
             //SETUP
             var service = new ServiceCollection();
-            DbContext emptyDbContext = new TestDbContext(SqliteInMemory.CreateOptions<TestDbContext>());
+            TestDbContext emptyDbContext = new TestDbContext(SqliteInMemory.CreateOptions<TestDbContext>());
             service.RegisterBizRunnerWithDtoScans<TestDbContext>(Assembly.GetAssembly(typeof(ServiceLayerBizInDto)));
             var diProvider = service.BuildServiceProvider();
 

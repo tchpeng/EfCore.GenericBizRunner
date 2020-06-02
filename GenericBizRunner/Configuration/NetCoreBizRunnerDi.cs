@@ -1,14 +1,14 @@
-﻿// Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+﻿// Original work Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// Modified work Copyright (c) 2020 tchpeng, GitHub: tchpeng
 // Licensed under MIT license. See License.txt in the project root for license information.
 
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Reflection;
 using GenericBizRunner.Configuration.Internal;
 using GenericBizRunner.PublicButHidden;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace GenericBizRunner.Configuration
 {
@@ -20,29 +20,29 @@ namespace GenericBizRunner.Configuration
         /// <summary>
         /// This is the method for registering GenericBizRunner and any GenericBizRunner DTOs with .NET Core DI provider
         /// </summary>
-        /// <typeparam name="TDefaultDbContext"></typeparam>
+        /// <typeparam name="TDefaultRepository"></typeparam>
         /// <param name="services"></param>
         /// <param name="assembliesToScan">These are the assemblies to scan for DTOs</param>
-        public static void RegisterBizRunnerWithDtoScans<TDefaultDbContext>(this IServiceCollection services, params Assembly[] assembliesToScan)
-            where TDefaultDbContext : DbContext
+        public static void RegisterBizRunnerWithDtoScans<TDefaultRepository>(this IServiceCollection services, params Assembly[] assembliesToScan)
+            where TDefaultRepository : IRepository
         {
-            services.RegisterBizRunnerWithDtoScans<TDefaultDbContext>(new GenericBizRunnerConfig(), assembliesToScan);
+            services.RegisterBizRunnerWithDtoScans<TDefaultRepository>(new GenericBizRunnerConfig(), assembliesToScan);
         }
 
         /// <summary>
         /// This is the method for registering GenericBizRunner and any GenericBizRunner DTOs with .NET Core DI provider with config
         /// </summary>
-        /// <typeparam name="TDefaultDbContext"></typeparam>
+        /// <typeparam name="TDefaultRepository"></typeparam>
         /// <param name="services"></param>
         /// <param name="config"></param>
         /// <param name="assembliesToScan">These are the assemblies to scan for DTOs</param>
-        public static void RegisterBizRunnerWithDtoScans<TDefaultDbContext>(this IServiceCollection services, IGenericBizRunnerConfig config,
+        public static void RegisterBizRunnerWithDtoScans<TDefaultRepository>(this IServiceCollection services, IGenericBizRunnerConfig config,
             params Assembly[] assembliesToScan)
-            where TDefaultDbContext : DbContext
+            where TDefaultRepository : IRepository
         {
             if (config == null) throw new ArgumentNullException(nameof(config));
 
-            services.AddScoped<DbContext>(sp => sp.GetService<TDefaultDbContext>());
+            services.AddScoped<IRepository>(sp => sp.GetService<TDefaultRepository>());
             services.AddTransient(typeof(IActionService<>), typeof(ActionService<>));
             services.AddTransient(typeof(IActionServiceAsync<>), typeof(ActionServiceAsync<>));
 
@@ -50,7 +50,7 @@ namespace GenericBizRunner.Configuration
         }
 
         /// <summary>
-        /// This is used to register GenericBizRunner and any GenericBizRunner DTOs with .NET Core DI provider to work with multiple DbContexts
+        /// This is used to register GenericBizRunner and any GenericBizRunner DTOs with .NET Core DI provider to work with multiple repository
         /// </summary>
         /// <param name="services"></param>
         /// <param name="assembliesToScan">These are the assemblies to scan for DTOs</param>
@@ -60,7 +60,7 @@ namespace GenericBizRunner.Configuration
         }
 
         /// <summary>
-        /// This is used to register GenericBizRunner and any GenericBizRunner DTOs with .NET Core DI provider to work with multiple DbContexts
+        /// This is used to register GenericBizRunner and any GenericBizRunner DTOs with .NET Core DI provider to work with multiple repository
         /// </summary>
         /// <param name="services"></param>
         /// <param name="config"></param>
@@ -82,7 +82,7 @@ namespace GenericBizRunner.Configuration
         private static void BuildRegisterWrappedConfig(this IServiceCollection services, 
             IGenericBizRunnerConfig config, params Assembly[] assembliesToScan)
         {
-            //It is possible that the user would use both default DbContext and MultiDbContext, so we only add if not already there
+            //It is possible that the user would use both default repository and multiple repository, so we only add if not already there
             if (!services.Contains(
                 new ServiceDescriptor(typeof(IWrappedBizRunnerConfigAndMappings), config), new CheckDescriptor()))
             {

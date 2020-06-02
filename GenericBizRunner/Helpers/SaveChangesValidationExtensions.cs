@@ -1,24 +1,26 @@
 ﻿// Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT license. See License.txt in the project root for license information.
 
+using GenericBizRunner.Configuration;
+using Microsoft.EntityFrameworkCore;
+using StatusGeneric;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using GenericBizRunner.Configuration;
-using Microsoft.EntityFrameworkCore;
-using StatusGeneric;
 
 namespace GenericBizRunner.Helpers
 {
     /// <summary>
     /// This static class contains the extension methods for saving data with validation
+    /// Note: Only be used if type of DbContext is being used and supplied via IRepository
     /// </summary>
     public static class SaveChangesValidationExtensions
     {
         /// <summary>
         /// This SaveChangesAsync, with a boolean to decide whether to validate or not
+        /// Note: Only be used if type of DbContext is being used and supplied via IRepository
         /// </summary>
         /// <param name="context"></param>
         /// <param name="shouldValidate"></param>
@@ -34,6 +36,7 @@ namespace GenericBizRunner.Helpers
 
         /// <summary>
         /// This SaveChanges, with a boolean to decide whether to validate or not
+        /// Note: Only be used if type of DbContext is being used and supplied via IRepository
         /// </summary>
         /// <param name="context"></param>
         /// <param name="shouldValidate"></param>
@@ -53,6 +56,7 @@ namespace GenericBizRunner.Helpers
         /// <summary>
         /// This will validate any entity classes that will be added or updated
         /// If the validation does not produce any errors then SaveChangesAsync will be called 
+        /// Note: Only be used if type of DbContext is being used and supplied via IRepository
         /// </summary>
         /// <param name="context"></param>
         /// <param name="config"></param>
@@ -70,7 +74,8 @@ namespace GenericBizRunner.Helpers
 
         /// <summary>
         /// This will validate any entity classes that will be added or updated
-        /// If the validation does not produce any errors then SaveChanges will be called 
+        /// If the validation does not produce any errors then SaveChanges will be called
+        /// Note: Only be used if type of DbContext is being used and supplied via IRepository
         /// </summary>
         /// <param name="context"></param>
         /// <param name="config"></param>

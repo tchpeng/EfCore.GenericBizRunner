@@ -1,19 +1,14 @@
 ﻿// Copyright (c) 2016 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT license. See License.txt in the project root for license information.
 
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 using DataLayer.EfClasses;
 using DataLayer.EfCode.Configurations;
+using GenericBizRunner;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataLayer.EfCode
 {
-    public class EfCoreContext : DbContext
+    public class EfCoreContext : DbContext, IRepository
     {
         public DbSet<Book> Books { get; set; }            
         public DbSet<Author> Authors { get; set; }        

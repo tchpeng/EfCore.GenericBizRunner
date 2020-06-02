@@ -8,11 +8,13 @@ namespace GenericBizRunner.Configuration
 {
     /// <summary>
     /// This holds the default UpdateSuccessMessageOnGoodWrite implementation
+    /// Note: Only be used if type of DbContext is being used and supplied via IRepository
     /// </summary>
     public static class DefaultMessageUpdater
     {
         /// <summary>
         /// This is the default code that changes the Message on successful write to the database
+        /// Note: Only be used if type of DbContext is being used and supplied via IRepository
         /// </summary>
         /// <param name="bizStatus"></param>
         /// <param name="config"></param>

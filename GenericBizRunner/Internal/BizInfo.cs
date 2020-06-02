@@ -1,11 +1,10 @@
 ﻿// Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT license. See License.txt in the project root for license information.
 
+using GenericBizRunner.PublicButHidden;
 using System;
 using System.Linq;
 using System.Reflection;
-using GenericBizRunner.Configuration;
-using GenericBizRunner.PublicButHidden;
 
 namespace GenericBizRunner.Internal
 {
@@ -46,6 +45,7 @@ namespace GenericBizRunner.Internal
 
         /// <summary>
         /// True if the interface name contains "WriteDb"
+        /// Note: Only be used if type of DbContext is being used and supplied via IRepository
         /// </summary>
         public bool RequiresSaveChanges => _matchingServiceType.RequiresSaveChanges;
 

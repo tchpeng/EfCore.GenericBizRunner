@@ -1,9 +1,9 @@
-﻿// Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+﻿// Original work Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// Modified work Copyright (c) 2020 tchpeng, GitHub: tchpeng
 // Licensed under MIT license. See License.txt in the project root for license information.
 
-using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace GenericBizRunner.Internal.DtoAccessors
 {
@@ -11,14 +11,14 @@ namespace GenericBizRunner.Internal.DtoAccessors
         where TBizIn : class, new()
         where TDtoIn : GenericActionToBizDtoAsync<TBizIn, TDtoIn>, new()
     {
-        public async Task<TBizIn> CopyToBizAsync(DbContext db, IMapper mapper, object source)
+        public async Task<TBizIn> CopyToBizAsync(object repository, IMapper mapper, object source)
         {
-            return await ((TDtoIn)source).CopyToBizDataAsync(db, mapper, (TDtoIn)source).ConfigureAwait(false);
+            return await ((TDtoIn)source).CopyToBizDataAsync(repository, mapper, (TDtoIn)source).ConfigureAwait(false);
         }
 
-        public async Task SetupSecondaryDataAsync(DbContext db, IBizActionStatus status, object dto)
+        public async Task SetupSecondaryDataAsync(object repository, IBizActionStatus status, object dto)
         {
-            await ((TDtoIn) dto).SetupSecondaryDataAsync(db, status).ConfigureAwait(false);
+            await ((TDtoIn) dto).SetupSecondaryDataAsync(repository, status).ConfigureAwait(false);
         }
     }
 }

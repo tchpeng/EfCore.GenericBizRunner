@@ -1,10 +1,10 @@
 ﻿// Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT license. See License.txt in the project root for license information.
 
+using GenericBizRunner.Internal.Runners;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using GenericBizRunner.Internal.Runners;
 
 namespace GenericBizRunner.Internal
 {
@@ -20,7 +20,7 @@ namespace GenericBizRunner.Internal
                     { typeof(IGenericActionInOnlyAsync<>), new ServiceBuilderLookup(typeof(ActionServiceInOnlyAsync<,>), RequestedInOut.In| RequestedInOut.Async, false)},
                     { typeof(IGenericActionOutOnly<>), new ServiceBuilderLookup(typeof(ActionServiceOutOnly<,>), RequestedInOut.Out, false)},
                     { typeof(IGenericActionOutOnlyAsync<>), new ServiceBuilderLookup(typeof(ActionServiceOutOnlyAsync<,>), RequestedInOut.Out | RequestedInOut.Async, false)},
-                    //Now the writeDb versions
+                    //Now the writeDb versions. Only be used if type of DbContext is being used and supplied via IRepository
                     { typeof(IGenericActionWriteDb<,>), new ServiceBuilderLookup(typeof(ActionServiceInOut<,,>), RequestedInOut.InOut, true)},
                     { typeof(IGenericActionWriteDbAsync<,>), new ServiceBuilderLookup(typeof(ActionServiceInOutAsync<,,>), RequestedInOut.InOut | RequestedInOut.Async, true)},
                     { typeof(IGenericActionInOnlyWriteDb<>), new ServiceBuilderLookup(typeof(ActionServiceInOnly<,>), RequestedInOut.In, true)},
@@ -49,6 +49,7 @@ namespace GenericBizRunner.Internal
 
         /// <summary>
         /// True if the interface name contains "WriteDb"
+        /// Note: Only be used if type of DbContext is being used and supplied via IRepository
         /// </summary>
         public bool RequiresSaveChanges { get; private set; }
 

@@ -5,6 +5,7 @@ namespace GenericBizRunner
     /// <summary>
     /// This is an async Action that returns a Task containing a result TOut
     /// It updates the database and therefore requires EF SaveChanges to be called to persist the changes
+    /// Note: Only be used if type of DbContext is being used and supplied via IRepository
     /// </summary>
     /// <typeparam name="TOut">Output from the business logic</typeparam>
     public interface IGenericActionOutOnlyWriteDbAsync<TOut> : IGenericActionOutOnlyAsync<TOut>

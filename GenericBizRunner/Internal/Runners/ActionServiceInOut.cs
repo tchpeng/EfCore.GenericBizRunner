@@ -1,10 +1,8 @@
-﻿// Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+﻿// Original work Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// Modified work Copyright (c) 2020 tchpeng, GitHub: tchpeng
 // Licensed under MIT license. See License.txt in the project root for license information.
 
-using AutoMapper;
-using GenericBizRunner.Configuration;
 using GenericBizRunner.PublicButHidden;
-using Microsoft.EntityFrameworkCore;
 
 namespace GenericBizRunner.Internal.Runners
 {
@@ -15,7 +13,7 @@ namespace GenericBizRunner.Internal.Runners
         {
         }
 
-        public TOut RunBizActionDbAndInstance<TOut>(DbContext db, TBizInterface bizInstance, object inputData)
+        public TOut RunBizActionDbAndInstance<TOut>(object repository, TBizInterface bizInstance, object inputData)
         {
             var toBizCopier = DtoAccessGenerator.BuildCopier(inputData.GetType(), typeof(TBizIn), true, false, WrappedConfig.Config.TurnOffCaching);
             var fromBizCopier = DtoAccessGenerator.BuildCopier(typeof(TBizOut), typeof(TOut), false, false, WrappedConfig.Config.TurnOffCaching);
@@ -24,15 +22,15 @@ namespace GenericBizRunner.Internal.Runners
             //The SetupSecondaryData produced errors
             if (bizStatus.HasErrors) return default(TOut);
 
-            var inData = toBizCopier.DoCopyToBiz<TBizIn>(db, WrappedConfig.ToBizIMapper, inputData);
+            var inData = toBizCopier.DoCopyToBiz<TBizIn>(repository, WrappedConfig.ToBizIMapper, inputData);
 
             var result = ((IGenericAction<TBizIn, TBizOut>) bizInstance).BizAction(inData);
 
-            //This handles optional call of save changes
-            SaveChangedIfRequiredAndNoErrors(db, bizStatus);
+            //This handles optional call of save changes. Only be used if type of DbContext is being used and supplied via IRepository.
+            SaveChangedIfRequiredAndNoErrors(repository, bizStatus);
             if (bizStatus.HasErrors) return default(TOut);
 
-            var data = fromBizCopier.DoCopyFromBiz<TOut>(db, WrappedConfig.FromBizIMapper, result);
+            var data = fromBizCopier.DoCopyFromBiz<TOut>(repository, WrappedConfig.FromBizIMapper, result);
             return data;
         }
     }

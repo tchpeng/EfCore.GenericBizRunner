@@ -1,10 +1,8 @@
-﻿// Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+﻿// Original work Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// Modified work Copyright (c) 2020 tchpeng, GitHub: tchpeng
 // Licensed under MIT license. See License.txt in the project root for license information.
 
-using AutoMapper;
-using GenericBizRunner.Configuration;
 using GenericBizRunner.PublicButHidden;
-using Microsoft.EntityFrameworkCore;
 
 namespace GenericBizRunner.Internal.Runners
 {
@@ -15,7 +13,7 @@ namespace GenericBizRunner.Internal.Runners
         {
         }
 
-        public void RunBizActionDbAndInstance(DbContext db, TBizInterface bizInstance, object inputData)
+        public void RunBizActionDbAndInstance(object repository, TBizInterface bizInstance, object inputData)
         {
             var toBizCopier = DtoAccessGenerator.BuildCopier(inputData.GetType(), typeof(TBizIn), true, false, WrappedConfig.Config.TurnOffCaching);
             var bizStatus = (IBizActionStatus)bizInstance;
@@ -23,14 +21,14 @@ namespace GenericBizRunner.Internal.Runners
             //The SetupSecondaryData produced errors
             if (bizStatus.HasErrors) return;
 
-            var inData = toBizCopier.DoCopyToBiz<TBizIn>(db, WrappedConfig.ToBizIMapper, inputData);
+            var inData = toBizCopier.DoCopyToBiz<TBizIn>(repository, WrappedConfig.ToBizIMapper, inputData);
 
             ((IGenericActionInOnly<TBizIn>)bizInstance).BizAction(inData);
 
-            //This handles optional call of save changes
-            SaveChangedIfRequiredAndNoErrors(db, bizStatus);
+            //This handles optional call of save changes. Only be used if type of DbContext is being used and supplied via IRepository.
+            SaveChangedIfRequiredAndNoErrors(repository, bizStatus);
             if (bizStatus.HasErrors)
-                toBizCopier.SetupSecondaryDataIfRequired(db, bizStatus, inputData);
+                toBizCopier.SetupSecondaryDataIfRequired(repository, bizStatus, inputData);
         }
     }
 }

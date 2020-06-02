@@ -1,11 +1,12 @@
 ﻿// Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT license. See License.txt in the project root for license information.
 
+using GenericBizRunner;
 using Microsoft.EntityFrameworkCore;
 
 namespace TestBizLayer.DbForTransactions
 {
-    public class TestDbContext : DbContext
+    public class TestDbContext : DbContext, IRepository
     {
         public DbSet<LogEntry> LogEntries { get; set; }
         public DbSet<UniqueEntity> UniqueEntities { get; set; }

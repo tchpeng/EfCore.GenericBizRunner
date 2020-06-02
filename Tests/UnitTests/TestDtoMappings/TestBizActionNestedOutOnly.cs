@@ -17,7 +17,7 @@ namespace Tests.UnitTests.TestDtoMappings
     public class TestBizActionNestedOutOnly
     {  
         //This action does not access the database, but the ActionService checks that the dbContext isn't null
-        private readonly DbContext _emptyDbContext = new TestDbContext(SqliteInMemory.CreateOptions<TestDbContext>());
+        private readonly TestDbContext _emptyDbContext = new TestDbContext(SqliteInMemory.CreateOptions<TestDbContext>());
         private readonly IGenericBizRunnerConfig _config= new GenericBizRunnerConfig { TurnOffCaching = true };
 
         [Fact]

@@ -19,17 +19,17 @@ namespace Tests.DTOs
 
         public bool CopyToBizDataCalled { get; private set; }
 
-        protected internal override void SetupSecondaryData(DbContext db, IStatusGenericHandler status)
+        protected internal override void SetupSecondaryData(object repository, IStatusGenericHandler status)
         {
             SetupSecondaryDataCalled = true;
             if (RaiseErrorInSetupSecondaryData)
                 status.AddError("Error in SetupSecondaryData");
         }
 
-        protected internal override BizDataIn CopyToBizData(DbContext db, IMapper mapper, ServiceLayerBizInDto source)
+        protected internal override BizDataIn CopyToBizData(object repository, IMapper mapper, ServiceLayerBizInDto source)
         {
             CopyToBizDataCalled = true;
-            return base.CopyToBizData(db, mapper, source);
+            return base.CopyToBizData(repository, mapper, source);
         }
     }
 }

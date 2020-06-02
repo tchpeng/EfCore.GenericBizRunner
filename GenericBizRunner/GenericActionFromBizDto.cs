@@ -1,9 +1,9 @@
-﻿// Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+﻿// Original work Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// Modified work Copyright (c) 2020 tchpeng, GitHub: tchpeng
 // Licensed under MIT license. See License.txt in the project root for license information.
 
 using AutoMapper;
 using GenericBizRunner.PublicButHidden;
-using Microsoft.EntityFrameworkCore;
 
 namespace GenericBizRunner
 {
@@ -21,8 +21,8 @@ namespace GenericBizRunner
         /// Useful if the biz method returns say primary keys only and you would like to look up
         /// data to show to the user.
         /// </summary>
-        /// <param name="db"></param>
-        protected internal virtual void SetupSecondaryOutputData(DbContext db)
+        /// <param name="repository"></param>
+        protected internal virtual void SetupSecondaryOutputData(object repository)
         {
         }
 
@@ -31,11 +31,11 @@ namespace GenericBizRunner
         /// Override this if you need to do some more complex calculation during the copy 
         /// Note: Look at AutoMapperSetup method first as that can handle a number of mapping issues
         /// </summary>
-        /// <param name="db"></param>
+        /// <param name="repository"></param>
         /// <param name="mapper"></param>
         /// <param name="source"></param>
         /// <returns></returns>
-        protected internal virtual TDtoOut CopyFromBizData(DbContext db, IMapper mapper, TBizOut source)
+        protected internal virtual TDtoOut CopyFromBizData(object repository, IMapper mapper, TBizOut source)
         {
             return mapper.Map<TDtoOut>(source);
         }

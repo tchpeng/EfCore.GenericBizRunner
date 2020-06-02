@@ -1,10 +1,9 @@
-﻿// Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+﻿// Original work Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// Modified work Copyright (c) 2020 tchpeng, GitHub: tchpeng
 // Licensed under MIT license. See License.txt in the project root for license information.
 
-using System.Threading.Tasks;
-using AutoMapper;
 using GenericBizRunner.PublicButHidden;
-using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace GenericBizRunner.Internal.Runners
 {
@@ -15,7 +14,7 @@ namespace GenericBizRunner.Internal.Runners
         {
         }
 
-        public async Task RunBizActionDbAndInstanceAsync(DbContext db, TBizInterface bizInstance, object inputData)
+        public async Task RunBizActionDbAndInstanceAsync(object repository, TBizInterface bizInstance, object inputData)
         {
             var toBizCopier = DtoAccessGenerator.BuildCopier(inputData.GetType(), typeof(TBizIn), true, true, WrappedConfig.Config.TurnOffCaching);
             var bizStatus = (IBizActionStatus)bizInstance;
@@ -23,14 +22,14 @@ namespace GenericBizRunner.Internal.Runners
             //The SetupSecondaryData produced errors
             if (bizStatus.HasErrors) return;
 
-            var inData = await toBizCopier.DoCopyToBizAsync<TBizIn>(db, WrappedConfig.ToBizIMapper, inputData).ConfigureAwait(false);
+            var inData = await toBizCopier.DoCopyToBizAsync<TBizIn>(repository, WrappedConfig.ToBizIMapper, inputData).ConfigureAwait(false);
 
             await ((IGenericActionInOnlyAsync<TBizIn>) bizInstance).BizActionAsync(inData).ConfigureAwait(false);
 
-            //This handles optional call of save changes
-            await SaveChangedIfRequiredAndNoErrorsAsync(db, bizStatus).ConfigureAwait(false);
+            //This handles optional call of save changes. Only be used if type of DbContext is being used and supplied via IRepository.
+            await SaveChangedIfRequiredAndNoErrorsAsync(repository, bizStatus).ConfigureAwait(false);
             if (bizStatus.HasErrors)
-                await toBizCopier.SetupSecondaryDataIfRequiredAsync(db, bizStatus, inputData).ConfigureAwait(false);
+                await toBizCopier.SetupSecondaryDataIfRequiredAsync(repository, bizStatus, inputData).ConfigureAwait(false);
         }
     }
 }

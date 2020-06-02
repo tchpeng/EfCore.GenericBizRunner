@@ -1,17 +1,13 @@
-﻿// Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+﻿// Original work Copyright (c) 2018 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// Modified work Copyright (c) 2020 tchpeng, GitHub: tchpeng
 // Licensed under MIT license. See License.txt in the project root for license information.
 
+using AutoMapper;
+using GenericBizRunner.Internal.DtoAccessors;
 using System;
 using System.Collections.Concurrent;
-using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using AutoMapper;
-using GenericBizRunner.Configuration;
-using GenericBizRunner.Internal.DtoAccessors;
-using GenericBizRunner.PublicButHidden;
-using Microsoft.EntityFrameworkCore;
-using StatusGeneric;
 
 [assembly: InternalsVisibleTo("Tests")]
 
@@ -62,56 +58,56 @@ namespace GenericBizRunner.Internal
         //---------------------------------------------------
         //InBiz methods
 
-        public TBiz DoCopyToBiz<TBiz>(DbContext db, IMapper mapper, object inputDto)
+        public TBiz DoCopyToBiz<TBiz>(object repository, IMapper mapper, object inputDto)
         {
             if (IsDirectCopy) return (TBiz) inputDto;
 
-            var result = (TBiz) _dtoAccessInstance.CopyToBiz(db, mapper, inputDto);
+            var result = (TBiz) _dtoAccessInstance.CopyToBiz(repository, mapper, inputDto);
             return result;
         }
 
-        public async Task<TBiz> DoCopyToBizAsync<TBiz>(DbContext db, IMapper mapper, object inputDto)
+        public async Task<TBiz> DoCopyToBizAsync<TBiz>(object repository, IMapper mapper, object inputDto)
         {
             //NOTE: Async business methods can use either sync or async dto, so we need to handle both
-            if (!_isAsync) return DoCopyToBiz<TBiz>(db, mapper, inputDto);
+            if (!_isAsync) return DoCopyToBiz<TBiz>(repository, mapper, inputDto);
 
-            var result = await ((Task<TBiz>) _dtoAccessInstance.CopyToBizAsync(db, mapper, inputDto)).ConfigureAwait(false);
+            var result = await ((Task<TBiz>) _dtoAccessInstance.CopyToBizAsync(repository, mapper, inputDto)).ConfigureAwait(false);
             return result;
         }
 
-        public void SetupSecondaryDataIfRequired(DbContext db, IBizActionStatus status, object inputDto)
+        public void SetupSecondaryDataIfRequired(object repository, IBizActionStatus status, object inputDto)
         {
             if (!IsDirectCopy)
                 //we need to call SetupSecondaryOutputData
-                _dtoAccessInstance.SetupSecondaryData(db, status, inputDto);
+                _dtoAccessInstance.SetupSecondaryData(repository, status, inputDto);
         }
 
-        public async Task SetupSecondaryDataIfRequiredAsync(DbContext db, IBizActionStatus status, object inputDto)
+        public async Task SetupSecondaryDataIfRequiredAsync(object repository, IBizActionStatus status, object inputDto)
         {
             //NOTE: Async business methods can use either sync or async dto, so we need to handle both
             if (!IsDirectCopy)
             {
                 //we need to call SetupSecondaryOutputData
                 if (_isAsync)
-                    await _dtoAccessInstance.SetupSecondaryDataAsync(db, status, inputDto).ConfigureAwait(false);
+                    await _dtoAccessInstance.SetupSecondaryDataAsync(repository, status, inputDto).ConfigureAwait(false);
                 else
-                    _dtoAccessInstance.SetupSecondaryData(db, status, inputDto);
+                    _dtoAccessInstance.SetupSecondaryData(repository, status, inputDto);
             }
         }
 
-        public T CreateDataWithPossibleSetup<T>(DbContext db, IBizActionStatus status, Action<T> runBeforeSetup) where T : class, new()
+        public T CreateDataWithPossibleSetup<T>(object repository, IBizActionStatus status, Action<T> runBeforeSetup) where T : class, new()
         {
             var result = new T();
             runBeforeSetup?.Invoke(result);
-            SetupSecondaryDataIfRequired(db, status, result);
+            SetupSecondaryDataIfRequired(repository, status, result);
             return result;
         }
 
-        public async Task<T> CreateDataWithPossibleSetupAsync<T>(DbContext db, IBizActionStatus status, Action<T> runBeforeSetup) where T : class, new()
+        public async Task<T> CreateDataWithPossibleSetupAsync<T>(object repository, IBizActionStatus status, Action<T> runBeforeSetup) where T : class, new()
         {
             var result = new T();
             runBeforeSetup?.Invoke(result);
-            await SetupSecondaryDataIfRequiredAsync(db, status, result).ConfigureAwait(false);
+            await SetupSecondaryDataIfRequiredAsync(repository, status, result).ConfigureAwait(false);
             return result;
         }
 
@@ -119,24 +115,24 @@ namespace GenericBizRunner.Internal
         //OutBiz methods
 
 
-        public TDto DoCopyFromBiz<TDto>(DbContext db, IMapper mapper, object bizOutput)
+        public TDto DoCopyFromBiz<TDto>(object repository, IMapper mapper, object bizOutput)
         {
             if (IsDirectCopy) return (TDto) bizOutput;
 
-            var result = (TDto) _dtoAccessInstance.CopyFromBiz(db, mapper, bizOutput);
+            var result = (TDto) _dtoAccessInstance.CopyFromBiz(repository, mapper, bizOutput);
             //we need to call SetupSecondaryOutputData
-            _dtoAccessInstance.SetupSecondaryOutputData(db, result);
+            _dtoAccessInstance.SetupSecondaryOutputData(repository, result);
 
             return result;
         }
 
-        public async Task<TDto> DoCopyFromBizAsync<TDto>(DbContext db, IMapper mapper, object bizOutput)
+        public async Task<TDto> DoCopyFromBizAsync<TDto>(object repository, IMapper mapper, object bizOutput)
         {
             //NOTE: Async business methods can use either sync or async dto, so we need to handle both
-            if (!_isAsync) return DoCopyFromBiz<TDto>(db, mapper, bizOutput);
+            if (!_isAsync) return DoCopyFromBiz<TDto>(repository, mapper, bizOutput);
 
-            var result = await ((Task<TDto>) _dtoAccessInstance.CopyFromBizAsync(db, mapper, bizOutput)).ConfigureAwait(false);
-            await _dtoAccessInstance.SetupSecondaryOutputDataAsync(db, result).ConfigureAwait(false);
+            var result = await ((Task<TDto>) _dtoAccessInstance.CopyFromBizAsync(repository, mapper, bizOutput)).ConfigureAwait(false);
+            await _dtoAccessInstance.SetupSecondaryOutputDataAsync(repository, result).ConfigureAwait(false);
             return result;
         }
 
