@@ -57,11 +57,11 @@ namespace EfCoreInAction
             #region GenericBizRunner parts
             //This sets up the GenericBizRunner to use one DbContext. Note: you could add a GenericBizRunnerConfig here if you needed it
             services.AddScoped<IRepository>(sp => sp.GetService<EfCoreContext>());
-            services.RegisterBizRunnerMultiDbContextWithDtoScans(Assembly.GetAssembly(typeof(WebChangeDeliveryDto)));
+            services.RegisterBizRunnerMultiRepositoryWithDtoScans(Assembly.GetAssembly(typeof(WebChangeDeliveryDto)));
             //services.RegisterBizRunnerWithDtoScans<EfCoreContext>(Assembly.GetAssembly(typeof(WebChangeDeliveryDto)));
             //This sets up the GenericBizRunner to work with multiple DbContext
             //see https://github.com/JonPSmith/EfCore.GenericBizRunner/wiki/Using-multiple-DbContexts
-            //services.RegisterBizRunnerMultiDbContextWithDtoScans(Assembly.GetAssembly(typeof(WebChangeDeliveryDto)));
+            //services.RegisterBizRunnerMultiRepositoryWithDtoScans(Assembly.GetAssembly(typeof(WebChangeDeliveryDto)));
             #endregion
 
             //now we register the public classes with public interfaces in the three layers

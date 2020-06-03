@@ -54,9 +54,9 @@ namespace GenericBizRunner.Configuration
         /// </summary>
         /// <param name="services"></param>
         /// <param name="assembliesToScan">These are the assemblies to scan for DTOs</param>
-        public static void RegisterBizRunnerMultiDbContextWithDtoScans(this IServiceCollection services, params Assembly[] assembliesToScan)
+        public static void RegisterBizRunnerMultiRepositoryWithDtoScans(this IServiceCollection services, params Assembly[] assembliesToScan)
         {
-            services.RegisterBizRunnerMultiDbContextWithDtoScans(new GenericBizRunnerConfig(), assembliesToScan);
+            services.RegisterBizRunnerMultiRepositoryWithDtoScans(new GenericBizRunnerConfig(), assembliesToScan);
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace GenericBizRunner.Configuration
         /// <param name="services"></param>
         /// <param name="config"></param>
         /// <param name="assembliesToScan">These are the assemblies to scan for DTOs</param>
-        public static void RegisterBizRunnerMultiDbContextWithDtoScans(this IServiceCollection services, IGenericBizRunnerConfig config,
+        public static void RegisterBizRunnerMultiRepositoryWithDtoScans(this IServiceCollection services, IGenericBizRunnerConfig config,
             params Assembly[] assembliesToScan)
         {
             if (config == null) throw new ArgumentNullException(nameof(config));

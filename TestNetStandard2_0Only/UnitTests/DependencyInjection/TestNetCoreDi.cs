@@ -47,7 +47,7 @@ namespace TestNetStandard2_0Only.UnitTests.DependencyInjection
             var service = new ServiceCollection();
 
             //ATTEMPT
-            service.RegisterBizRunnerMultiDbContextWithDtoScans(Assembly.GetAssembly(typeof(WebChangeDeliveryDto)));
+            service.RegisterBizRunnerMultiRepositoryWithDtoScans(Assembly.GetAssembly(typeof(WebChangeDeliveryDto)));
 
             //VERIFY
             service.Count.ShouldEqual(3);
@@ -65,7 +65,7 @@ namespace TestNetStandard2_0Only.UnitTests.DependencyInjection
 
             //ATTEMPT
             service.RegisterBizRunnerWithDtoScans<TestDbContext>(Assembly.GetAssembly(typeof(WebChangeDeliveryDto)));
-            service.RegisterBizRunnerMultiDbContextWithDtoScans(Assembly.GetAssembly(typeof(WebChangeDeliveryDto)));
+            service.RegisterBizRunnerMultiRepositoryWithDtoScans(Assembly.GetAssembly(typeof(WebChangeDeliveryDto)));
 
             //VERIFY
             service.Count.ShouldEqual(6);
