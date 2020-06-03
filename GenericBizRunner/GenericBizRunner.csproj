@@ -26,24 +26,22 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>GenericBizRunner</PackageId>
-    <PackageVersion>4.1.0</PackageVersion>
     <Version>1.0.1</Version>
     <AssemblyVersion>1.0.1.0</AssemblyVersion>
     <FileVersion>1.0.1.0</FileVersion>
     <Authors>tchpeng</Authors>
     <Description>Library to run business logic</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <Copyright>Original work Copyright (c) 2018 Jon P Smith. Modified work Copyright (c) 2020 tchpeng. Licenced under MIT licence</Copyright>
+    <Copyright>Original work Copyright (c) 2018 Jon P Smith. Modified work Copyright (c) 2020 tchpeng.</Copyright>
     <PackageProjectUrl>https://github.com/tchpeng/GenericBizRunner</PackageProjectUrl>
     <RepositoryUrl>https://github.com/tchpeng/GenericBizRunner</RepositoryUrl>
-    <PackageTags>Business Logic, ServiceLayer</PackageTags>
+    <PackageTags>Business Logic, Generic Service, Generic Action, Repository, Entity Framework Core</PackageTags>
     <PackageReleaseNotes></PackageReleaseNotes>
-    <PackageIconUrl>https://raw.githubusercontent.com/JonPSmith/EfCore.GenericBizRunner/master/GenericBizRunnerNuGetIcon128.png</PackageIconUrl>
-    <PackageLicenseUrl>https://github.com/JonPSmith/EfCore.GenericBizRunner/blob/master/LICENCE</PackageLicenseUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Company>tchpeng</Company>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Company />
+    <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
