@@ -57,7 +57,7 @@ namespace EfCoreInAction.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult PlaceOrder(PlaceOrderInDto dto, 
-            [FromServices]IActionService<IPlaceOrderAction> service)
+            [FromServices]IActionService<IRepository, IPlaceOrderAction> service)
         {    
             if (!ModelState.IsValid)
             {

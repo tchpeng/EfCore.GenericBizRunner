@@ -41,7 +41,7 @@ namespace EfCoreInAction.Controllers
         }
 
         public IActionResult ChangeDelivery(int id, 
-            [FromServices]IActionService<IChangeDeliverAction> service)
+            [FromServices]IActionService<IRepository, IChangeDeliverAction> service)
         {
             //When the DTO is created it will run the SetupSecondaryData method to build the data needed for the display
             //For the SetupSecondaryData to work it needs the orderId and UserId, so the GetOriginal method allow you to add these
@@ -60,7 +60,7 @@ namespace EfCoreInAction.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult ChangeDelivery(WebChangeDeliveryDto dto,
-            [FromServices]IActionService<IChangeDeliverAction> service)
+            [FromServices]IActionService<IRepository, IChangeDeliverAction> service)
         {
             if (!ModelState.IsValid)
             {
