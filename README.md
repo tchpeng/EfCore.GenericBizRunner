@@ -8,6 +8,8 @@ GenericBizRunner (modified from [EfCore.GenericBizRunner](https://github.com/Jon
 * A service, known as a *BizRunner*, that runs your business logic.
 * Very good use of Dependency Injection (DI), making calls to business logic very easy.
 
+GenericBizRunner is available as a [NuGet package](https://www.nuget.org/packages/GenericBizRunner/).
+
 ## Example of using GenericBizRunner in ASP.NET Core MVC
 
 Here is some code taken from the ExampleWebApp (which you can run), from the [OrdersController](https://github.com/JonPSmith/EfCore.GenericBizRunner/blob/master/ExampleWebApp/Controllers/OrdersController.cs)
