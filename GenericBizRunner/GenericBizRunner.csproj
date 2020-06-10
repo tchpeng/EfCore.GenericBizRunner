@@ -27,9 +27,9 @@
 
   <PropertyGroup>
     <PackageId>GenericBizRunner</PackageId>
-    <Version>1.0.1.1</Version>
-    <AssemblyVersion>1.0.1.1</AssemblyVersion>
-    <FileVersion>1.0.1.1</FileVersion>
+    <Version>1.0.1.2</Version>
+    <AssemblyVersion>1.0.1.2</AssemblyVersion>
+    <FileVersion>1.0.1.2</FileVersion>
     <Authors>tchpeng</Authors>
     <Description>Library to run business logic</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -37,7 +37,7 @@
     <PackageProjectUrl>https://github.com/tchpeng/GenericBizRunner</PackageProjectUrl>
     <RepositoryUrl>https://github.com/tchpeng/GenericBizRunner</RepositoryUrl>
     <PackageTags>Business Logic, Generic Service, Generic Action, Repository, Entity Framework Core</PackageTags>
-    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageReleaseNotes>- include documentation file in release</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Company />
